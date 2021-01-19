@@ -1,0 +1,44 @@
+name: Build
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+  
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Git User
+        run: |
+          git config --global user.email "72629236+dothq-robot@users.noreply.github.com"
+          git config --global user.name "dothq-robot"
+
+      - name: Download workspace
+        run: |
+          ./melon download
+          cd src
+          git init
+          git checkout --orphan base
+          git add -f .
+          git commit -am "Firefox" > /dev/null
+          git checkout -b dot
+
+      - name: Import patches
+        run: ./melon import
+      
+      - name: Build inside Docker
+        run: |
+          ls -l ./configs/linux
+          sudo chmod +x ./configs/linux/build_linux.sh
+          ./melon build linux
+        
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: build
+          path: obj-?/dist
