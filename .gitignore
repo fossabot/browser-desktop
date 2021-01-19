@@ -1,0 +1,11 @@
+*.env
+dist
+.dotbuild
+node_modules
+*.lock
+package-lock.json
+*.tar.xz
+firefox
+firefox-*
+src/**/*
+.DS_Store
