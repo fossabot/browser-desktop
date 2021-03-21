@@ -176,7 +176,7 @@ class Patch {
                         ],
                         { cwd: SRC_DIR }
                     );
-                } catch (e) { }
+                } catch (e) {}
 
                 const {
                     stdout,
